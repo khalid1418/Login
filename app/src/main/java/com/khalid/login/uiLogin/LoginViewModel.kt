@@ -1,17 +1,36 @@
 package com.khalid.login.uiLogin
 
-import android.provider.ContactsContract
-import android.util.Log
-import androidx.lifecycle.ViewModel
-import com.khalid.login.data.repository.UserRepository
 
-class LoginViewModel:ViewModel() {
+import android.util.Patterns
+import androidx.lifecycle.ViewModel
+import com.khalid.login.domin.CheckUserUseCase
+
+class LoginViewModel(private val checkUserUseCase: CheckUserUseCase):ViewModel() {
    var state:State? = null
 
-  fun userLogin(email:String , password:String){
-      val loginResponse = UserRepository().loginUser(email , password)
+  private fun userLogin(email:String , password:String){
+      val loginResponse = checkUserUseCase.invoke(email , password)
+
       state?.onSuccess(loginResponse)
   }
+
+     fun entryValid(
+        email: String,
+        password: String
+    ): Boolean {
+         return if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+             state?.onFailure("email required")
+             false
+         } else if (password.isBlank()) {
+             state?.onFailure("password required")
+             false
+         }else{
+
+             userLogin(email,password)
+             true
+
+         }
+    }
 
 
 

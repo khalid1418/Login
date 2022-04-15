@@ -5,8 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.khalid.login.R
-import com.khalid.login.databinding.FragmentLoginBinding
 import com.khalid.login.databinding.FragmentWelcomeBinding
 
 

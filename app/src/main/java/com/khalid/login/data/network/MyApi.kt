@@ -14,17 +14,24 @@ private val moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())
     .build()
 
+private val retrofit = Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(
+    MoshiConverterFactory.create(
+        moshi
+    )
+).build().create(MyApi::class.java)
 
 
 interface MyApi {
     @GET("User/{email}/login2/{password}")
-    fun userLogin(@Path("email") email: String , @Path("password")password:String):Call<ResponseBody>
+    fun userLogin(
+        @Path("email") email: String,
+        @Path("password") password: String
+    ): Call<ResponseBody>
 
-     companion object{
-         operator fun invoke():MyApi{
-             return Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(MoshiConverterFactory.create(
-                 moshi)).build().create(MyApi::class.java)
-         }
-     }
+    companion object {
+        operator fun invoke(): MyApi {
+            return retrofit
+        }
+    }
 }
 
