@@ -1,5 +1,7 @@
 package com.khalid.login.data.dataLayer
 
-class UserRepository(private val userRemoAteDataSource: UserRemoteDataSource) {
-    fun checkUser(email: String, password: String) = userRemoAteDataSource.loginUser(email, password)
+import com.khalid.login.model.UserLoginModel
+
+class UserRepository(private val userRemoAteDataSource: UserDataSource) {
+    fun checkUser(userLoginModel: UserLoginModel) = userRemoAteDataSource.loginUser(userLoginModel)
 }

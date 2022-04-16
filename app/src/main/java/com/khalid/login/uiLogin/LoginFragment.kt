@@ -43,7 +43,7 @@ class LoginFragment : Fragment() , State {
 
 
         binding?.button?.setOnClickListener {
-            isEntryValid()
+            success()
         }
 
 
@@ -56,24 +56,31 @@ class LoginFragment : Fragment() , State {
         )
     }
 
-
-
-    override fun onStarted() {
-        binding?.progressBar?.show()
+    private fun success(){
+        if (isEntryValid()){
+            viewModel.checkUser(
+                binding?.emailEditText?.text.toString(),
+                binding?.passwordEditText?.text.toString()
+            )
+        }
     }
 
-    override fun onSuccess(loginResponse: LiveData<String>) {
-        onStarted()
-        loginResponse.observe(this) {
-            binding?.progressBar?.hide()
-            if (it == "Not Found") {
-                Toast.makeText(context, "Email or password is incorrect", Toast.LENGTH_SHORT).show()
 
-            } else {
-                val action = LoginFragmentDirections.actionLoginFragmentToWelcomeFragment()
-                findNavController().navigate(action)
-            }
+
+    override fun onStarted(loginResponse: LiveData<String>) {
+        binding?.progressBar?.show()
+        loginResponse.observe(this){
+            viewModel.userResponse(it)
         }
+    }
+
+    override fun onSuccess() {
+            binding?.progressBar?.hide()
+                    val action = LoginFragmentDirections.actionLoginFragmentToWelcomeFragment()
+                    findNavController().navigate(action)
+
+
+
 
     }
 
@@ -82,6 +89,7 @@ class LoginFragment : Fragment() , State {
         Toast.makeText(context, massage, Toast.LENGTH_SHORT).show()
 
     }
+
 
 }
 
