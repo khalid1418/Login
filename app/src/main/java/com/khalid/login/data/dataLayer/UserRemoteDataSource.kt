@@ -30,7 +30,7 @@ class UserRemoteDataSource(private val myApi: MyApi):UserDataSource {
                 }
 
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                    loginResponse.value= t.cause?.localizedMessage
+                    loginResponse.value= "Network Error"
                 }
             })
         return loginResponse

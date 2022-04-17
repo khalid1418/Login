@@ -54,7 +54,7 @@ class LoginViewModel(private val checkUserUseCase: CheckUserUseCase):ViewModel()
         when (response) {
             "Not Found" -> state?.onFailure("Email or password is incorrect")
 
-            "android_getaddrinfo failed: EAI_NODATA (No address associated with hostname)" -> state?.onFailure("Error Network")
+            "Network Error" -> state?.onFailure("Can't reach Network")
 
             else -> state?.onSuccess()
         }
