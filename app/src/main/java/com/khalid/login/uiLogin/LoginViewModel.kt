@@ -9,7 +9,7 @@ import java.util.regex.Pattern
 class LoginViewModel(private val checkUserUseCase: CheckUserUseCase):ViewModel() {
    var state:State? = null
 
-  private fun userLogin(userLoginModel: UserLoginModel){
+   fun userLogin(userLoginModel: UserLoginModel){
       val loginResponse = checkUserUseCase.invoke(userLoginModel)
       state?.onStarted(loginResponse)
   }
@@ -50,16 +50,21 @@ class LoginViewModel(private val checkUserUseCase: CheckUserUseCase):ViewModel()
         val user = entryCheckUser(email, password)
         userLogin(user)
     }
-    fun userResponse(response:String) {
-        when (response) {
-            "Not Found" -> state?.onFailure("Email or password is incorrect")
-
-            "Network Error" -> state?.onFailure("Can't reach Network")
-
-            else -> state?.onSuccess()
+    fun userResponse(response:String): Boolean {
+      return  when (response) {
+            "Not Found" -> {
+                state?.onFailure("Email or password is incorrect")
+                false
+            }
+            "Network Error" -> {
+                state?.onFailure("Can't reach Network")
+                false
+            }
+            else -> {
+                state?.onSuccess()
+                true
+            }
         }
     }
-
-
 
 }
